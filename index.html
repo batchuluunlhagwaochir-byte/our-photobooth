@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хос Фото Бүүт 📸</title>
+    <!-- PeerJS холболтын сан -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #ffe6e6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        h1 { color: #ff4757; margin-bottom: 5px; }
+        .setup-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        button {
+            padding: 8px 15px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        /* Бүүтний дөрвөлжин жааз */
+        .booth-strip {
+            background: #222;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 320px; /* Яг бүүтний зураг шиг нарийн урт */
+        }
+        .video-box {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            background: #000;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+        }
+        .label {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .controls { margin-top: 20px; }
+        #snap-btn {
+            background: #2ed573;
+            padding: 12px 25px;
+            font-size: 18px;
+            border-radius: 30px;
+        }
+        #canvas { display: none; }
+        /* Зургийн цомог */
+        .gallery { margin-top: 30px; width: 320px; }
+        .gallery-grid { display: flex; flex-direction: column; gap: 15px; }
+        .captured-strip {
+            background: white;
+            padding: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .captured-strip img { width: 100%; border-radius: 4px; }
+        .download-btn {
+            display: inline-block;
+            margin-top: 5px;
+            color: #ff4757;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>💞 Хос Фото Бүүт</h1>
+    <p style="margin-bottom: 20px;">Халд байгаа ч хамтдаа...</p>
+
+    <!-- Холбогдох хэсэг -->
+    <div class="setup-box">
+        <div>
+            <strong>Миний ID:</strong> <span id="my-id" style="color: blue;">Уншиж байна...</span>
+        </div>
+        <div style="margin-top: 10px;">
+            <input type="text" id="peer-id-input" placeholder="Найз охиныхоо ID-г хий">
+            <button id="connect-btn">Холбогдох 🔗</button>
+        </div>
+    </div>
+
+    <!-- Фото бүүт дэлгэц -->
+    <div class="booth-strip">
+        <div class="video-box">
+            <video id="local-video" autoplay playsinline muted></video>
+            <div class="label">Би</div>
+        </div>
+        <div class="video-box">
+            <video id="remote-video" autoplay playsinline></video>
+            <div class="label">Найз охин</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="snap-btn">Хамт зураг дарах 📸</button>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <!-- Зургийн цомог -->
+    <div class="gallery">
+        <h3>Дарсан зургууд:</h3>
+        <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+
+    <!-- Логик кодыг энд холбоно -->
+    <script src="app.js"></script>
+</body>
+</html>
